@@ -5,13 +5,8 @@ var Messages = new Meteor.Collection("messages");
 
 if (Meteor.is_client) {
 Meteor.startup(function() {
-        Meteor.subscribe("lobby");
-        Meteor.autosubscribe(function() {
-         if (Session.get("room") != undefined)
-         {
-           Meteor.subscribe("chat", Session.get("room"));
-         }
-        });
+        Meteor.subscribe("rooms");
+        Meteor.subscribe("messages");
         Meteor.setInterval(function() {
           var theRoom = Rooms.findOne(Session.get("room"));
          if (theRoom !== undefined)
@@ -28,7 +23,6 @@ Meteor.startup(function() {
             x: Session.get("dx"),
             y: Session.get("dy")
           });
-	  Meteor.flush();
          }
        }, 100);
 });
@@ -76,7 +70,6 @@ Template.room.events = {
         Session.set("room", undefined);
     },
     "submit": function() {
-        Meteor.flush();
         Messages.insert({
             room: Session.get("room"),
             author: Session.get("name"),
@@ -92,7 +85,7 @@ Template.room.roomName = function() {
 };
 
 Template.room.messages = function() {
-    return Messages.find({});
+    return Messages.find({room: Session.get("room")});
 };
 
 Template.room.x = function() {
@@ -109,11 +102,11 @@ Template.room.y = function() {
 if (Meteor.is_server) {
   Meteor.startup(function () {
     // code to run on server at startup
-  Meteor.publish("lobby", function() {
+  Meteor.publish("rooms", function() {
     return Rooms.find({});
   });
-  Meteor.publish("chat", function(room_id) {
-    return Messages.find({room: room_id});
+  Meteor.publish("messages", function() {
+    return Messages.find({});
   });
 
 Meteor.methods({
