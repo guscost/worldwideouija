@@ -215,6 +215,11 @@ links */
  * CUSTOM DEFINITONS HERE
  */
 
+body{
+background-image:url('http://i.imgur.com/JrHGj.png');
+background-repeat:repeat;
+}
+
 ul{
 padding: 0;
 }
@@ -224,7 +229,7 @@ list-style: none;
 }
 
 #roomName {
-width: 350px;
+width: 345px;
 }
 
 .roomItem {
@@ -241,7 +246,7 @@ height:100%;
 }
 
 .roomList {
-width: 960px;
+width: 450px;
 position: relative;
 margin: 0 auto;
 }
