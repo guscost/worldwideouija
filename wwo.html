@@ -1,0 +1,64 @@
+<head>
+  <title>WWO</title>
+</head>
+
+<body>
+    <div id="wrapper">
+        {{> main}}
+    </div>
+</body>
+
+<template name="main">
+    {{#if currentRoom}}
+        {{> room}}
+    {{/if}}
+    {{#unless currentRoom}}
+        {{> rooms}}
+    {{/unless}}
+</template>
+
+<template name="rooms">
+  <div class="roomList">
+    <h1>World Wide Ouija!</h1>
+    <form action="javascript:void(0)">
+        <input id="roomName" />
+        <button type="button" id="addRoom">New Room</button>
+    </form>
+    <hr>
+    <ul>
+        {{#each availableRooms}}
+            {{> roomItem}}
+        {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="roomItem">
+    <li class="roomItem">
+        {{name}} <a href="javascript:void(0);" class="enter">[Enter]</a>
+    </li>
+</template>
+
+<template name="room">
+    <div class="roomScreen">
+        <center><h2>{{roomName}}</h2></center>
+      <div class="gameBoard">
+        <div class="marker" style="top:{{y}}px; left:{{x}}px"></div>
+      </div>
+    <div class="quit">
+        <button type="button" id="leave">Leave</button>
+    </div>
+    <div class="chat">
+    <ul id="messages">
+        {{#each messages}}
+            <li><span class="author">{{author}}:</span> {{text}}</li>
+        {{/each}}
+    </ul>
+    <form action="javascript:void(0)">
+        <label for="msg">Message: </label>
+        <input id="msg" />
+        <button type="submit">&rArr; Send</button>
+    </form>
+    </div>
+    </div>
+</template>
