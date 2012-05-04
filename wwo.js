@@ -32,9 +32,7 @@ Meteor.startup(function() {
         var roomName = $('#roomName').val();
         if(roomName != "") {
             Rooms.insert({
-              name: roomName,
-              x: 200,
-              y: 200
+              name: roomName
             });
         }
     }
@@ -64,7 +62,7 @@ Template.room.events = {
     "mousemove .gameBoard": function(e) {
         var theRoom = Rooms.findOne(Session.get("room"));
         Session.set("dx", ((e.pageX - parseInt($('.gameBoard').css("margin-left"))) - Session.get("posX"))/25);
-        Session.set("dy", (e.pageY - Session.get("posY"))/25);
+        Session.set("dy", ((e.pageY - 50) - Session.get("posY"))/25);
     },
     "click #leave": function() {
         Session.set("room", undefined);
@@ -101,7 +99,10 @@ Template.room.y = function() {
 
 if (Meteor.is_server) {
   Meteor.startup(function () {
-    // code to run on server at startup
+ 
+  // code to run on server at startup
+  Messages.remove({});
+
   Meteor.publish("rooms", function() {
     return Rooms.find({});
   });
@@ -112,16 +113,20 @@ if (Meteor.is_server) {
 Meteor.methods({
   updateMarker: function(id) {
     var theRoom = Rooms.findOne(id); 
-    var theForces = Forces.find({room: id});
+    if (isNaN(theRoom.x)) theRoom.x = 480;
+    if (isNaN(theRoom.y)) theRoom.y = 320;
+
     var dx = 0;
     var dy = 0;
+    var theForces = Forces.find({room: id});
     theForces.forEach(function(force) {
       dx += parseInt(force.x);
       dy += parseInt(force.y);
     });
     Forces.remove({room: id});
-    var newX = parseInt(theRoom.x) + dx;
-    var newY = parseInt(theRoom.y) + dy;
+
+    var newX = theRoom.x + dx;
+    var newY = theRoom.y + dy;
     if (newX < 100) newX = 100;
     if (newX > 860) newX = 860;
     if (newY < 100) newY = 100;
@@ -129,13 +134,12 @@ Meteor.methods({
     Rooms.update(id, {$set: {x: newX}});
     Rooms.update(id, {$set: {y: newY}});      
   },
+
   getPosition: function (id) {
     var theRoom = Rooms.findOne(id);
     var position = {};
     position.x = parseInt(theRoom.x);
     position.y = parseInt(theRoom.y);
-    if (isNaN(position.x)) position.x = 200;
-    if (isNaN(position.y)) position.y = 200;
     return position;
   }
 });
