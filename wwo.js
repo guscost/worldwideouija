@@ -11,6 +11,8 @@ if (Meteor.is_client) {
       {
         if (isNaN(Session.get("dx"))) Session.set("dx", 0);
         if (isNaN(Session.get("dy"))) Session.set("dy", 0);
+        Session.set("dx", Session.get("dx") * 0.9);
+        Session.set("dy", Session.get("dy") * 0.9);
         Forces.insert({
           room: Session.get("room"),
           x: Session.get("dx"),
@@ -54,6 +56,11 @@ if (Meteor.is_client) {
     }
   };
 
+  Template.roomItem.numPlayers = function() {
+    var room = Rooms.findOne(this._id);
+    return room.players ? room.players : 0;
+  }
+
   Template.room.events = {
     "mousemove .gameBoard": function(e) {
       var theRoom = Rooms.findOne(Session.get("room"));
@@ -61,7 +68,10 @@ if (Meteor.is_client) {
       Session.set("dy", ((e.pageY - 50) - Session.get("posY"))/25);
     },
     "click #leave": function() {
+      var theRoom = Rooms.findOne(Session.get("room"));
+      if (theRoom.players > 0) Rooms.update(theRoom._id, {$set: {players: theRoom.players - 1}});
       Session.set("room", undefined);
+      Meteor.flush();
     },
     "submit": function() {
       Messages.insert({
@@ -75,7 +85,7 @@ if (Meteor.is_client) {
 
   Template.room.roomName = function() {
     var room = Rooms.findOne(Session.get("room"));
-    return room && room.name ;
+    return room && room.name;
   };
 
   Template.room.messages = function() {
@@ -93,7 +103,8 @@ if (Meteor.is_client) {
 
 if (Meteor.is_server) {
   Meteor.startup(function () {
-    //CLEAR MESSAGES
+    //CLEAR ALL ROOMS AND MESSAGES
+    Rooms.remove({});
     Messages.remove({});
     //PUBLISH COLLECTIONS
     Meteor.publish("rooms", function() {
@@ -108,18 +119,22 @@ if (Meteor.is_server) {
         var theRoom = Rooms.findOne(id); 
         if (isNaN(theRoom.x)) theRoom.x = 480;
         if (isNaN(theRoom.y)) theRoom.y = 320;
+        if (isNaN(theRoom.players)) theRoom.players = 0;
 
         var dx = 0;
         var dy = 0;
+        var numForces = 0;
         var theForces = Forces.find({room: id});
         theForces.forEach(function(force) {
           dx += parseInt(force.x);
           dy += parseInt(force.y);
+          numForces++;
         });
+        Rooms.update(id, {$set: {players: numForces}});
         Forces.remove({room: id});
 
-        var newX = theRoom.x + dx;
-        var newY = theRoom.y + dy;
+        var newX = theRoom.x + dx/numForces;
+        var newY = theRoom.y + dy/numForces;
         if (newX < 100) newX = 100;
         if (newX > 860) newX = 860;
         if (newY < 100) newY = 100;

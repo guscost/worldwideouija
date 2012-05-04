@@ -46,7 +46,7 @@ design)
    
 ========================================================================== 
 */ a { color: #00e; } a:visited { color: #551a8b; } a:hover { color: 
-#06e; }
+#BBC; }
 a:focus { outline: thin dotted; } /* Improve readability when focused 
 and hovered in all browsers: h5bp.com/h */ a:hover, a:active { outline: 
 0; } /* 
@@ -225,6 +225,7 @@ text-decoration:none;
 background: #333;
 color: #EEE;
 padding: 2px 5px;
+margin-top: -2px;
 }
 
 ul{
