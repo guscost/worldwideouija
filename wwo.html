@@ -35,7 +35,7 @@
 
 <template name="roomItem">
     <li class="roomItem">
-        {{name}} <a href="javascript:void(0);" class="enter">[Join Room]</a>
+        {{name}} <a href="javascript:void(0);" class="enter">Join Room</a>
     </li>
 </template>
 
@@ -46,7 +46,7 @@
         <div class="marker" style="top:{{y}}px; left:{{x}}px"></div>
       </div>
     <div class="quit">
-        <button type="button" id="leave">Leave</button>
+        <a href="javascript:void(0);" id="leave">Leave Room</a>
     </div>
     <div class="chat">
     <ul id="messages">

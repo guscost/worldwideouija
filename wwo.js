@@ -7,20 +7,19 @@ if (Meteor.is_client) {
     Meteor.subscribe("rooms");
     Meteor.subscribe("messages");
     Meteor.setInterval(function() {
-      var theRoom = Rooms.findOne(Session.get("room"));
-      if (theRoom !== undefined)
-  	  {
+      if (Session.get("room"))
+      {
         if (isNaN(Session.get("dx"))) Session.set("dx", 0);
         if (isNaN(Session.get("dy"))) Session.set("dy", 0);
-        Meteor.call("updateMarker", Session.get("room"));
-        Meteor.call("getPosition", Session.get("room"), function(e,r) {
-          Session.set("posX", r.x);
-          Session.set("posY", r.y);
-        });
         Forces.insert({
           room: Session.get("room"),
           x: Session.get("dx"),
           y: Session.get("dy")
+        });
+        Meteor.call("updateMarker", Session.get("room"));
+        Meteor.call("getPosition", Session.get("room"), function(e,r) {
+          Session.set("posX", r.x);
+          Session.set("posY", r.y);
         });
       }
     }, 100);

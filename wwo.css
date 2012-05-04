@@ -212,12 +212,19 @@ links */
 
 
 /*
- * CUSTOM DEFINITONS HERE
+ * CUSTOM CSS HERE
  */
 
 body{
 background-image:url('http://i.imgur.com/JrHGj.png');
 background-repeat:repeat;
+}
+
+a{
+text-decoration:none;
+background: #333;
+color: #EEE;
+padding: 2px 5px;
 }
 
 ul{
@@ -234,6 +241,7 @@ width: 345px;
 
 .roomItem {
 width: 450px;
+margin: 6px 0;
 }
 
 .roomItem a {
