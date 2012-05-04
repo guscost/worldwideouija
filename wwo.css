@@ -251,7 +251,7 @@ width: 960px;
 height: 640px;
 position: relative;
 margin: 0 auto;
-background-image:url('http://i.imgur.com/fjTOk.png');
+background-image:url('http://i.imgur.com/ZixCI.png');
 }
 
 .marker {
@@ -272,9 +272,9 @@ position: fixed;
 bottom: 0;
 right: 0;
 background: #DDD;
-padding: 0 10px;
+padding: 0 10px 10px 10px;
 }
 
-.author {
+label, .author {
 font-weight: bold;
 }

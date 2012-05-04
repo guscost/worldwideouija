@@ -35,7 +35,7 @@
 
 <template name="roomItem">
     <li class="roomItem">
-        {{name}} <a href="javascript:void(0);" class="enter">[Enter]</a>
+        {{name}} <a href="javascript:void(0);" class="enter">[Join Room]</a>
     </li>
 </template>
 
@@ -55,9 +55,9 @@
         {{/each}}
     </ul>
     <form action="javascript:void(0)">
-        <label for="msg">Message: </label>
+        <label for="msg">Chat:</label>
         <input id="msg" />
-        <button type="submit">&rArr; Send</button>
+        <button type="submit">Send</button>
     </form>
     </div>
     </div>
