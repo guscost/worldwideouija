@@ -19,8 +19,11 @@ if (Meteor.is_client) {
           y: Session.get("dy")
         });
         Meteor.call("updateMarker", Session.get("room"), function(e,r) {
-          Session.set("posX", r.x);
-          Session.set("posY", r.y);
+          if (r.x && r.y)
+          {
+            Session.set("posX", r.x);
+            Session.set("posY", r.y);
+          }
         });
       }
     }, 100);
@@ -116,35 +119,38 @@ if (Meteor.is_server) {
 
     Meteor.methods({
       updateMarker: function(id) {
-        var theRoom = Rooms.findOne(id); 
-        if (isNaN(theRoom.x)) theRoom.x = 480;
-        if (isNaN(theRoom.y)) theRoom.y = 320;
-        if (isNaN(theRoom.players)) theRoom.players = 0;
-
-        var dx = 0;
-        var dy = 0;
-        var numForces = 0;
-        var theForces = Forces.find({room: id});
-        theForces.forEach(function(force) {
-          dx += parseInt(force.x);
-          dy += parseInt(force.y);
-          numForces++;
-        });
-        Rooms.update(id, {$set: {players: numForces}});
-        Forces.remove({room: id});
-
-        var newX = theRoom.x + dx/numForces;
-        var newY = theRoom.y + dy/numForces;
-        if (newX < 100) newX = 100;
-        if (newX > 860) newX = 860;
-        if (newY < 100) newY = 100;
-        if (newY > 540) newY = 540;
-        Rooms.update(id, {$set: {x: newX}});
-        Rooms.update(id, {$set: {y: newY}});      
-
+        var theRoom = Rooms.findOne(id);
         var position = {};
-        position.x = newX;
-        position.y = newY;
+        if (theRoom)
+        { 
+          if (isNaN(theRoom.x)) theRoom.x = 480;
+          if (isNaN(theRoom.y)) theRoom.y = 320;
+          if (isNaN(theRoom.players)) theRoom.players = 0;
+
+          var dx = 0;
+          var dy = 0;
+          var numForces = 0;
+          var theForces = Forces.find({room: id});
+          theForces.forEach(function(force) {
+            dx += parseInt(force.x);
+            dy += parseInt(force.y);
+            numForces++;
+          });
+          Rooms.update(id, {$set: {players: numForces}});
+          Forces.remove({room: id});
+
+          var newX = theRoom.x + dx/numForces;
+          var newY = theRoom.y + dy/numForces;
+          if (newX < 100) newX = 100;
+          if (newX > 860) newX = 860;
+          if (newY < 100) newY = 100;
+          if (newY > 540) newY = 540;
+          Rooms.update(id, {$set: {x: newX}});
+          Rooms.update(id, {$set: {y: newY}});      
+
+          position.x = newX;
+          position.y = newY;
+        }
         return position;
       }
     });
