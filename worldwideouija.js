@@ -40,7 +40,8 @@ if (Meteor.is_client) {
   Template.rooms.events = {
     "submit": function () {
       var roomName = $('#roomName').val();
-      if(roomName != "") {
+      $('#roomName').val('');
+      if(roomName != '') {
         Rooms.insert({name: roomName });
       }
     }
