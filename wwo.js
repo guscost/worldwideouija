@@ -18,8 +18,7 @@ if (Meteor.is_client) {
           x: Session.get("dx"),
           y: Session.get("dy")
         });
-        Meteor.call("updateMarker", Session.get("room"));
-        Meteor.call("getPosition", Session.get("room"), function(e,r) {
+        Meteor.call("updateMarker", Session.get("room"), function(e,r) {
           Session.set("posX", r.x);
           Session.set("posY", r.y);
         });
@@ -36,7 +35,7 @@ if (Meteor.is_client) {
   };
 
   Template.rooms.events = {
-    "click #addRoom": function () {
+    "submit": function () {
       var roomName = $('#roomName').val();
       if(roomName != "") {
         Rooms.insert({name: roomName });
@@ -141,12 +140,10 @@ if (Meteor.is_server) {
         if (newY > 540) newY = 540;
         Rooms.update(id, {$set: {x: newX}});
         Rooms.update(id, {$set: {y: newY}});      
-      },
-      getPosition: function (id) {
-        var theRoom = Rooms.findOne(id);
+
         var position = {};
-        position.x = parseInt(theRoom.x);
-        position.y = parseInt(theRoom.y);
+        position.x = newX;
+        position.y = newY;
         return position;
       }
     });
