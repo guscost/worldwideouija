@@ -63,7 +63,8 @@ if (Meteor.is_client) {
   Template.room.events = {
     "mousemove .gameBoard": function(e) {
       var theRoom = Rooms.findOne(Session.get("room"));
-      Session.set("dx", ((e.pageX - parseInt($('.gameBoard').css("margin-left"))) - Session.get("posX"))/25);
+      var trueX = e.pageX - parseInt($('.gameBoard').css('margin-left'));
+      Session.set("dx", (trueX - Session.get("posX"))/25);
       Session.set("dy", ((e.pageY - 50) - Session.get("posY"))/25);
     },
     "click #leave": function() {
