@@ -40,25 +40,25 @@
 </template>
 
 <template name="room">
-    <div class="roomScreen">
-        <center><h2>{{roomName}}</h2></center>
-      <div class="gameBoard">
-        <div class="marker" style="top:{{y}}px; left:{{x}}px"></div>
-      </div>
+  <div class="roomScreen">
+    <center><h2>{{roomName}}</h2></center>
+    <div class="gameBoard">
+      <div class="marker" style="top:{{y}}px; left:{{x}}px"></div>
+    </div>
     <div class="quit">
         <a href="javascript:void(0);" id="leave">Leave Room</a>
     </div>
     <div class="chat">
-    <ul id="messages">
+      <ul id="messages">
         {{#each messages}}
             <li><span class="author">{{author}}:</span> {{text}}</li>
         {{/each}}
-    </ul>
-    <form action="javascript:void(0)">
+      </ul>
+      <form action="javascript:void(0)">
         <label for="msg">Chat:</label>
         <input id="msg" />
         <button type="submit">Send</button>
-    </form>
+      </form>
     </div>
-    </div>
+  </div>
 </template>
