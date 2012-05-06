@@ -138,18 +138,20 @@ if (Meteor.is_server) {
           });
           Forces.remove({room: id});
           Rooms.update(id, {$set: {players: numForces}});
+          if (numForces > 0)
+          {
+            var newX = theRoom.x + dx/numForces;
+            var newY = theRoom.y + dy/numForces;
+            if (newX < 100) newX = 100;
+            if (newX > 860) newX = 860;
+            if (newY < 100) newY = 100;
+            if (newY > 540) newY = 540;
+            Rooms.update(id, {$set: {x: newX}});
+            Rooms.update(id, {$set: {y: newY}});      
 
-          var newX = theRoom.x + dx/numForces;
-          var newY = theRoom.y + dy/numForces;
-          if (newX < 100) newX = 100;
-          if (newX > 860) newX = 860;
-          if (newY < 100) newY = 100;
-          if (newY > 540) newY = 540;
-          Rooms.update(id, {$set: {x: newX}});
-          Rooms.update(id, {$set: {y: newY}});      
-
-          position.x = newX;
-          position.y = newY;
+            position.x = newX;
+            position.y = newY;
+          }
         }
         return position;
       }
