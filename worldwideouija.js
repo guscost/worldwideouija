@@ -72,7 +72,7 @@ if (Meteor.is_client) {
     },
     "click #leave": function() {
       var theRoom = Rooms.findOne(Session.get("room"));
-      if (theRoom.players > 0) Rooms.update(theRoom._id, {$set: {players: theRoom.players - 1}});
+      Rooms.update(theRoom._id, {$set: {players: 0}});
       Session.set("room", undefined);
       Meteor.flush();
     },
@@ -154,5 +154,11 @@ if (Meteor.is_server) {
         return position;
       }
     });
+    Meteor.setInterval(function() {
+      var theRooms = Rooms.find();
+      theRooms.forEach(function(room) {
+        Meteor.call("updateMarker", room._id);
+      });
+    }, 5000);
   });
 }
