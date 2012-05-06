@@ -136,8 +136,8 @@ if (Meteor.is_server) {
             dy += parseInt(force.y);
             numForces++;
           });
-          Rooms.update(id, {$set: {players: numForces}});
           Forces.remove({room: id});
+          Rooms.update(id, {$set: {players: numForces}});
 
           var newX = theRoom.x + dx/numForces;
           var newY = theRoom.y + dy/numForces;
