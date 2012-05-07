@@ -4,27 +4,29 @@ var Messages = new Meteor.Collection("messages");
 
 if (Meteor.is_client) {
   Meteor.startup(function() {
-    Meteor.subscribe("rooms");
-    Meteor.subscribe("messages");
+    Meteor.subscribe("allrooms");
+    Meteor.subscribe("allmessages");
     Meteor.setInterval(function() {
-      if (Session.get("room"))
+      var roomID = Session.get("room");
+      if (roomID)
       {
         if (isNaN(Session.get("dx"))) Session.set("dx", 0);
         if (isNaN(Session.get("dy"))) Session.set("dy", 0);
         Session.set("dx", Session.get("dx") * 0.9);
         Session.set("dy", Session.get("dy") * 0.9);
         Forces.insert({
-          room: Session.get("room"),
+          room: roomID,
           x: Session.get("dx"),
           y: Session.get("dy")
         });
-        Meteor.call("updateMarker", Session.get("room"), function(e,r) {
+        Meteor.call("updateMarker", roomID, function(e,r) {
           if (r.x && r.y)
           {
             Session.set("posX", r.x);
             Session.set("posY", r.y);
           }
         });
+        Meteor.flush();
       }
     }, 100);
   });
@@ -81,9 +83,9 @@ if (Meteor.is_client) {
       Messages.insert({
         room: Session.get("room"),
         author: Session.get("name"),
-        text: $("#msg").val()
+        text: $('#msg').val()
       });
-      $("#msg").val("");
+      $('#msg').val('');
     }
   };
 
@@ -108,13 +110,13 @@ if (Meteor.is_client) {
 if (Meteor.is_server) {
   Meteor.startup(function () {
     //CLEAR ALL ROOMS AND MESSAGES
-    Rooms.remove({});
-    Messages.remove({});
+    //Rooms.remove({});
+    //Messages.remove({});
     //PUBLISH COLLECTIONS
-    Meteor.publish("rooms", function() {
+    Meteor.publish("allrooms", function() {
       return Rooms.find({});
     });
-    Meteor.publish("messages", function() {
+    Meteor.publish("allmessages", function() {
       return Messages.find({});
     });
 

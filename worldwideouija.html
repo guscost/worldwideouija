@@ -21,14 +21,16 @@
   <div class="roomList">
     <center><h1>World Wide Ouija!</h1></center>
     <form action="javascript:void(0)">
+      <center>
         <input id="roomName" />
         <button type="submit">New Room</button>
+      </center> 
     </form>
     <hr>
     <ul>
-        {{#each availableRooms}}
-            {{> roomItem}}
-        {{/each}}
+      {{#each availableRooms}}
+        {{> roomItem}}
+      {{/each}}
     </ul>
   </div>
 </template>

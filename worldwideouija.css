@@ -228,6 +228,10 @@ padding: 2px 5px;
 margin-top: -2px;
 }
 
+button{
+padding: 2px 20px;
+}
+
 ul{
 padding: 0;
 }
@@ -237,7 +241,7 @@ list-style: none;
 }
 
 #roomName {
-width: 330px;
+width: 300px;
 }
 
 .roomItem {
