@@ -162,6 +162,7 @@ if (Meteor.is_server) {
         Messages.remove({});
       }
     });
+
     Meteor.setInterval(function() {
       var theRooms = Rooms.find({});
       theRooms.forEach(function(room) {
