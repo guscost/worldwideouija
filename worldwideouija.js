@@ -27,7 +27,7 @@ if (Meteor.is_client) {
           }
         });
       }
-    }, 600);
+    }, 666);
   });
 
   Template.main.currentRoom = function() {
