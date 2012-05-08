@@ -50,6 +50,7 @@
     <div class="quit">
         <a href="javascript:void(0);" id="leave">Leave Room</a>
     </div>
+    <center><p>Ask a question, then hover over the game board to push the Ouija marker around!</p></center>
     <div class="chat">
       <ul id="messages">
         {{#each messages}}
@@ -57,8 +58,8 @@
         {{/each}}
       </ul>
       <form action="javascript:void(0)">
-        <label for="msg">Chat:</label>
-        <input id="msg" />
+        <label for="messageInput">Chat:</label>
+        <input id="messageInput" />
         <button type="submit">Send</button>
       </form>
     </div>

@@ -4,7 +4,7 @@ var Messages = new Meteor.Collection("messages");
 
 if (Meteor.is_client) {
   Meteor.startup(function() {
-    Meteor.subscribe("allrooms");
+    Meteor.subscribe("allrooms"); 
     Meteor.subscribe("allmessages");
     Meteor.setInterval(function() {
       var roomID = Session.get("room");
@@ -26,9 +26,8 @@ if (Meteor.is_client) {
             Session.set("posY", r.y);
           }
         });
-        Meteor.flush();
       }
-    }, 100);
+    }, 600);
   });
 
   Template.main.currentRoom = function() {
@@ -64,14 +63,14 @@ if (Meteor.is_client) {
   Template.roomItem.numPlayers = function() {
     var room = Rooms.findOne(this._id);
     return room.players ? room.players : 0;
-  }
+  };
 
   Template.room.events = {
     "mousemove .gameBoard": function(e) {
       var theRoom = Rooms.findOne(Session.get("room"));
       var trueX = e.pageX - parseInt($('.gameBoard').css('margin-left'));
-      Session.set("dx", (trueX - Session.get("posX"))/25);
-      Session.set("dy", ((e.pageY - 50) - Session.get("posY"))/25);
+      Session.set("dx", (trueX - Session.get("posX"))/10);
+      Session.set("dy", ((e.pageY - 50) - Session.get("posY"))/10);
     },
     "click #leave": function() {
       var theRoom = Rooms.findOne(Session.get("room"));
@@ -80,12 +79,12 @@ if (Meteor.is_client) {
       Meteor.flush();
     },
     "submit": function() {
-      Messages.insert({
-        room: Session.get("room"),
-        author: Session.get("name"),
-        text: $('#msg').val()
+      Messages.insert({ 
+        room: Session.get("room"), 
+        author: Session.get("name"), 
+        text: $('#messageInput').val()
       });
-      $('#msg').val('');
+      $('#messageInput').val('');
     }
   };
 
@@ -105,6 +104,7 @@ if (Meteor.is_client) {
   Template.room.y = function() {
     return Session.get("posY") && parseInt(Session.get("posY")) - 100;
   };
+
 }
 
 if (Meteor.is_server) {
@@ -157,10 +157,13 @@ if (Meteor.is_server) {
           }
         }
         return position;
+      },
+      clearMessages: function() {
+        Messages.remove({});
       }
     });
     Meteor.setInterval(function() {
-      var theRooms = Rooms.find();
+      var theRooms = Rooms.find({});
       theRooms.forEach(function(room) {
         Meteor.call("updateMarker", room._id);
       });
